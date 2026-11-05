@@ -41,8 +41,11 @@ const civilDate = (date: string, weekday = false) =>
     day: "numeric",
     ...(weekday ? { weekday: "short" } : {}),
   }).format(new Date(`${date}T12:00:00Z`));
-const shortReference = (reference: string) =>
-  reference.length > 15 ? `…${reference.slice(-12)}` : reference;
+const shortReference = (reference: string) => {
+  const standard = /^FUV-\d{4}-(\d+)$/i.exec(reference);
+  if (standard) return `F-${standard[1]}`;
+  return reference.length > 12 ? `…${reference.slice(-9)}` : reference;
+};
 const kindLabels = {
   loading: "Felrakás",
   loaded: "Rakott út",
