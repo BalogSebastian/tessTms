@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A tessTMS fuvarszervezési rendszer videós bemutatója.">
+<meta property="og:title" content="tessTMS bemutató">
+<meta property="og:image" content="/bemutato/video/poster.jpg">
+<style>:root{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}html{scroll-behavior:smooth}</style>
+<title>tessTMS bemutató</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a sötétzöld termékoldali „navigációs sáv" nyit, utána egy oszlopos, képernyőképekre épülő tárlat, a tessTMS saját arculatával. */
+:root{
+  --bg:#f4f6f5; --surface:#ffffff; --ink:#18332d; --muted:#5d6f69; --line:#dfe7e3;
+  --green:#087f70; --nav:#102d28; --nav-ink:#e9f2ef; --lime:#e5ff00; --lime-ink:#102d28;
+  --ok:#0a7f4f; --ok-bg:#e3f4ec; --warn:#9a6200; --warn-bg:#fbf0da; --ext:#7a3fa0; --ext-bg:#f1e8f7;
+  --display:"Manrope",Arial,sans-serif; --body:"DM Sans",Arial,sans-serif; --mono:"JetBrains Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1b18; --surface:#13251f; --ink:#e3eeea; --muted:#9db1aa; --line:#24403a;
+  --green:#3fc2ae; --nav:#071411; --nav-ink:#e3eeea; --lime:#e5ff00; --lime-ink:#102d28;
+  --ok:#5fd39e; --ok-bg:#12342a; --warn:#f0b955; --warn-bg:#3a2c12; --ext:#cfa3ef; --ext-bg:#2d1c3a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1b18; --surface:#13251f; --ink:#e3eeea; --muted:#9db1aa; --line:#24403a;
+  --green:#3fc2ae; --nav:#071411; --nav-ink:#e3eeea; --lime:#e5ff00; --lime-ink:#102d28;
+  --ok:#5fd39e; --ok-bg:#12342a; --warn:#f0b955; --warn-bg:#3a2c12; --ext:#cfa3ef; --ext-bg:#2d1c3a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:clamp(26px,3.4vw,36px);font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+a{color:var(--green)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.lead{color:var(--muted);max-width:65ch}
+
+/* Hero */
+.hero{background:var(--nav);color:var(--nav-ink)}
+.hero .wrap{padding-block:56px 40px;display:grid;gap:28px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:800;font-size:22px}
+.brand .t{width:40px;height:40px;border-radius:10px;background:var(--lime);color:var(--lime-ink);display:grid;place-items:center;font-size:24px}
+.brand small{font-family:var(--mono);font-size:11px;font-weight:500;border:1px solid #ffffff40;border-radius:6px;padding:2px 6px;letter-spacing:.08em}
+.hero h1{font-size:clamp(34px,5.6vw,62px);font-weight:800;letter-spacing:-.03em;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--lime)}
+.hero p.lead{color:#b9cdc7;font-size:18px}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-weight:700;font-family:var(--display);text-decoration:none;font-size:15px}
+.btn.primary{background:var(--lime);color:var(--lime-ink)}
+.btn.ghost{border:1px solid #ffffff38;color:var(--nav-ink)}
+.btn .url{font-family:var(--mono);font-weight:400;font-size:12px;opacity:.75}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:#ffffff1c;border:1px solid #ffffff1c;border-radius:14px;overflow:hidden}
+.facts div{background:var(--nav);padding:16px 18px}
+.facts b{display:block;font-family:var(--display);font-size:28px;color:var(--lime);font-variant-numeric:tabular-nums}
+.facts span{font-size:13px;color:#b9cdc7}
+.shot-hero{border-radius:14px;overflow:hidden;border:1px solid #ffffff22;box-shadow:0 30px 60px #00000055}
+.shot-hero img{display:block;width:100%}
+
+section{padding-block:64px}
+section + section{border-top:1px solid var(--line)}
+.head{display:grid;gap:10px;margin-bottom:32px}
+
+/* Flow */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;counter-reset:f}
+.flow li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:8px;align-content:start}
+.flow li::before{counter-increment:f;content:counter(f);font-family:var(--mono);font-size:12px;color:var(--green);border:1px solid var(--green);border-radius:999px;width:26px;height:26px;display:grid;place-items:center}
+.flow p{color:var(--muted);font-size:14.5px}
+ol.flow{padding:0;margin:0}
+
+/* Screens */
+.screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:36px;align-items:start;padding-block:28px}
+.screen:nth-child(even){grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.screen:nth-child(even) .txt{order:2}
+.screen .txt{display:grid;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px)}
+.screen ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:4px}
+.frame{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface);max-height:560px;overflow-y:auto}
+.frame img{display:block;width:100%}
+.frame.phone{max-width:300px;margin-inline:auto;border-radius:26px;border:6px solid var(--nav)}
+.route{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* Modules */
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:10px;align-content:start}
+.mod h3{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+.mod dl{margin:0;display:grid;gap:8px}
+.mod dt{font-weight:700;font-size:15px}
+.mod dd{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line);gap:1px}
+.step{background:var(--surface);padding:18px;display:grid;gap:6px;align-content:start}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--green)}
+.step p{color:var(--muted);font-size:14px}
+
+/* Tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+td.d{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.part{background:var(--warn-bg);color:var(--warn)}
+.pill.ext{background:var(--ext-bg);color:var(--ext)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;font-size:14px;color:var(--muted);align-items:center}
+
+/* Roles + arch */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.roles{display:grid;gap:10px}
+.role{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.role code{font-family:var(--mono);font-size:13px;color:var(--green);font-weight:500}
+.role p{font-size:14px;color:var(--muted)}
+.layers{display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;padding:12px 16px;border-left:3px solid var(--green);background:var(--surface);border-radius:0 10px 10px 0}
+.layer b{font-family:var(--display);font-size:14px}
+.layer span{font-size:14px;color:var(--muted)}
+
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.next div{border:1px dashed var(--line);border-radius:12px;padding:16px;display:grid;gap:6px}
+.next p{font-size:14px;color:var(--muted)}
+
+.cmd{font-family:var(--mono);font-size:13px;background:var(--nav);color:var(--nav-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.video-sec{background:var(--surface)}
+.player{border-radius:14px;overflow:hidden;border:1px solid #ffffff22;background:var(--nav);box-shadow:0 24px 60px #0b1f1a33;aspect-ratio:16/10;max-width:100%}
+.player video{display:block;width:100%;height:100%;background:var(--nav)}
+.vcap{color:#b9cdc7;font-size:14px;margin-top:-12px}
+footer{background:var(--nav);color:#b9cdc7;font-size:14px}
+footer .wrap{padding-block:32px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:var(--lime)}
+
+@media (max-width:820px){
+  .screen,.screen:nth-child(even){grid-template-columns:minmax(0,1fr)}
+  .screen:nth-child(even) .txt{order:0}
+  .screen .txt{position:static}
+  .role,.layer{grid-template-columns:minmax(0,1fr);gap:4px}
+}
+@media (prefers-reduced-motion:no-preference){.btn{transition:transform .15s}.btn:hover{transform:translateY(-1px)}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand"><span class="t">t</span>tessTMS <small>PRO</small></div>
+    <h1>Minden fuvar. <em>Egy biztos irány.</em></h1>
+    <p class="lead">A TESOTTER magyar nyelvű fuvarszervezési és vállalati műveleti munkatere. A megbízástól a diszponáláson és a teljesítésen át a számlaelőkészítésig egy közös adatbázisban fut a teljes működés, 19 egymáshoz kapcsolódó szakmai modullal.</p>
+    <div class="links">
+      <a class="btn primary" href="#video">▶ Videós bemutató <span class="url">5 perc</span></a>
+      <a class="btn ghost" id="live-link" href="https://tess-tms.vercel.app" target="_blank" rel="noopener">Élő alkalmazás <span class="url">tess-tms.vercel.app</span></a>
+      <a class="btn ghost" href="https://github.com/BalogSebastian/tessTms" target="_blank" rel="noopener">Forráskód <span class="url">github.com/BalogSebastian/tessTms</span></a>
+    </div>
+    <div class="facts">
+      <div><b>19</b><span>szakmai követelménycsoport</span></div>
+      <div><b>8</b><span>lépéses fuvarrögzítés</span></div>
+      <div><b>4</b><span>szerepkör, elkülönített munkaterek</span></div>
+      <div><b>79</b><span>automatikus teszt, mind zöld</span></div>
+    </div>
+    <div id="video" class="player"><video id="demo-video" controls playsinline preload="metadata" poster="/bemutato/video/poster.jpg" src="/bemutato/video/tesstms-bemutato.mp4"></video></div>
+    <p class="vcap">Videós bemutató, 5 perc, feliratokkal: mi működik már, mi nincs még benne, hogyan skálázható, és milyen biztonsági szintre vihető.</p>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">A központi folyamat</span>
+      <h2>Egy fuvar útja a rendszerben</h2>
+      <p class="lead">A központi üzleti egység a fuvarmegbízás. Minden modul ugyanazt a munkateret olvassa, így a megállók, árumozgások, díjak, erőforrások, dokumentumok és számlák végig egymáshoz kötve maradnak.</p>
+    </div>
+    <ol class="flow">
+      <li><h3>Rendelésfelvétel</h3><p>Vezetett rögzítés vagy ellenőrzött CSV/Excel import. A hitelkeret már itt blokkol.</p></li>
+      <li><h3>Diszponálás</h3><p>Jármű, sofőr és pótkocsi kiosztása idővonalon, ütközés-, raksúly-, ADR- és szervizellenőrzéssel.</p></li>
+      <li><h3>Teljesítés</h3><p>Státuszfolyamat, sofőr munkatér, CMR és dokumentumok, incidensek rögzítése.</p></li>
+      <li><h3>Költség és fedezet</h3><p>Terv- és tényköltség fuvaronként, HUF/EUR, üzletági és céges összesítés.</p></li>
+      <li><h3>Számlaelőkészítés</h3><p>Lezárt fuvarokból gyűjtött előkészítés, duplázásvédelemmel, jóváhagyással és SAP-outboxszal.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Képernyők</span>
+      <h2>Így néz ki a munkatér</h2>
+      <p class="lead">Valódi képernyőképek a bemutató mintaadatokkal. A képek görgethetők.</p>
+    </div>
+
+    <div class="screen">
+      <div class="txt">
+        <span class="route">/orders</span>
+        <h3>Fuvarok</h3>
+        <p class="lead">A megbízások teljes operatív és pénzügyi képe egy táblában.</p>
+        <ul>
+          <li>Kiosztatlan, kiosztott és összes fuvar külön fülön</li>
+          <li>Szűrés dátumra, megbízóra, státuszra, szabad szöveges keresés</li>
+          <li>Felrakó/lerakó, rakomány, LDM, ADR-jelölés, fuvardíj és fedezet soronként</li>
+          <li>Testreszabható oszlopok, kompakt és kényelmes nézet, export</li>
+        </ul>
+      </div>
+      <div class="frame"><img src="/bemutato/img/orders.png" alt="Fuvarok lista kiosztatlan fuvarokkal" loading="lazy"></div>
+    </div>
+
+    <div class="screen">
+      <div class="txt">
+        <span class="route">/dispatch</span>
+        <h3>Járműtervező</h3>
+        <p class="lead">A teljes flotta egy összehangolt idővonalon, nap, 3 nap vagy hét nézetben.</p>
+        <ul>
+          <li>Drag-and-drop járműkiosztás, többnapos fuvarok megjelenítése</li>
+          <li>Jármű-, sofőr- és pótkocsiütközés azonnali jelzése</li>
+          <li>Kijelölt erőforrás adatai: raksúly, utolsó hely, vezetési tartalék</li>
+          <li>Felrakás, rakott út, üres út és lerakás színkódolva</li>
+        </ul>
+      </div>
+      <div class="frame"><img src="/bemutato/img/planner.png" alt="Járműtervező idővonal ütközésjelzéssel" loading="lazy"></div>
+    </div>
+
+    <div class="screen">
+      <div class="txt">
+        <span class="route">/new-order</span>
+        <h3>Új fuvarmegbízás</h3>
+        <p class="lead">Nyolclépéses, vezetett rögzítés, felül mindig látható partner- és megbízásfejléccel.</p>
+        <ul>
+          <li>Több fel- és lerakó, tételszintű árumozgás, méretek, plomba, hőmérséklet</li>
+          <li>Díj, költség és fedezet számítása rögzítés közben</li>
+          <li>Kötelező megbízás-feltöltés és nyomtatható visszaigazolás</li>
+        </ul>
+      </div>
+      <div class="frame"><img src="/bemutato/img/order.png" alt="Új fuvarmegbízás rögzítő varázsló" loading="lazy"></div>
+    </div>
+
+    <div class="screen">
+      <div class="txt">
+        <span class="route">/integrations</span>
+        <h3>Integrációk és SAP</h3>
+        <p class="lead">Szerveroldali adapterek, a kulcsok soha nem kerülnek a böngészőbe.</p>
+        <ul>
+          <li>HERE Routing v8 és Google Routes útvonalszámítás</li>
+          <li>SAP Business One Service Layer kapcsolatteszt</li>
+          <li>HTTPS webhook elérhetőségi teszt, előkészítési outbox</li>
+        </ul>
+      </div>
+      <div class="frame"><img src="/bemutato/img/integrations.png" alt="Integrációk és SAP beállítások" loading="lazy"></div>
+    </div>
+
+    <div class="screen">
+      <div class="txt">
+        <span class="route">mobil nézet</span>
+        <h3>Reszponzív felület</h3>
+        <p class="lead">A munkatér telefonon is használható, a sofőr munkatér sofőr szerint szűrt feladatokat, megállókat és státuszléptetést mutat.</p>
+      </div>
+      <div class="frame phone"><img src="/bemutato/img/mobile.png" alt="A tessTMS mobil nézete" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Modulok</span>
+      <h2>Mit tud a rendszer</h2>
+      <p class="lead">A bal oldali navigáció hat csoportja, a modulok rövid leírásával.</p>
+    </div>
+    <div class="mods">
+      <div class="mod"><h3>Áttekintés · Operáció</h3><dl>
+        <dt>Műveleti központ</dt><dd>KPI-k, flottatérkép, figyelmet igénylő jelzések.</dd>
+        <dt>Fuvarmegbízások</dt><dd>Lista, másolás, státuszfolyamat, eseményelőzmény.</dd>
+        <dt>Rendelésfelvétel</dt><dd>Kötegelt CSV- és .xlsx-import, legfeljebb 5 MB / 1000 sor, visszavonható köteg.</dd>
+        <dt>Diszponálás</dt><dd>Idővonalas járműtervező, ütközés- és kapacitásellenőrzés.</dd>
+        <dt>Útvonalak és térkép</dt><dd>Tárolt viszonylatok km-rel, menetidővel, útdíjjal.</dd>
+        <dt>Sofőr munkatér</dt><dd>Feladatok, megállók, státusz és fuvarüzenetek.</dd>
+      </dl></div>
+      <div class="mod"><h3>Erőforrások</h3><dl>
+        <dt>Flotta és szerviz</dt><dd>Járműtörzs, km-óra, szervizhatár, műszaki érvényesség, kiosztási tiltás.</dd>
+        <dt>Dokumentumtár</dt><dd>Fuvarhoz kötött fájlok, verziók, CMR-hiányjelzés.</dd>
+        <dt>Partnerek / CRM</dt><dd>Kapcsolattartó, fizetési határidő, hitelkeret, kintlévőség.</dd>
+        <dt>Készlet és eszközök</dt><dd>Cikktörzs, minimumkészlet, dokumentált mozgások.</dd>
+      </dl></div>
+      <div class="mod"><h3>Pénzügy</h3><dl>
+        <dt>Költség és fedezet</dt><dd>Terv/tény költségtételek, üzletági összesítés.</dd>
+        <dt>Számlaelőkészítés</dt><dd>Azonos partner, cég és deviza ellenőrzése, sztornó, outbox.</dd>
+        <dt>Beszerzés</dt><dd>Igény → Jóváhagyva → Megrendelve → Beérkezett.</dd>
+        <dt>Riportok és analitika</dt><dd>Fuvar-, partner-, jármű- és cégszintű KPI-k, CSV-export.</dd>
+      </dl></div>
+      <div class="mod"><h3>Intelligencia</h3><dl>
+        <dt>routeR optimalizáció</dt><dd>Kapacitás, ADR és elérhetőség alapján magyarázható járműrangsor.</dd>
+        <dt>scanR dokumentumok</dt><dd>Feltöltés, kézzel ellenőrizhető kivonat, fuvarba emelés.</dd>
+        <dt>Állapot és káresemény</dt><dd>Incidens súlyossággal, fotóbizonyítékkal.</dd>
+        <dt>Tess asszisztens</dt><dd>Szabályalapú válaszok a munkatér adataiból, modulnavigáció.</dd>
+      </dl></div>
+      <div class="mod"><h3>Platform</h3><dl>
+        <dt>Integrációk / SAP</dt><dd>HERE, Google, SAP B1, webhook kapcsolattesztek.</dd>
+        <dt>Cégcsoport</dt><dd>Szerkeszthető cégtörzs, cég- és üzletági kontrolling, erőforrás-átirányítás.</dd>
+        <dt>Rendszer és napló</dt><dd>Felhasználók, szerepkörök, megváltoztathatatlan auditnapló.</dd>
+      </dl></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Fuvarrögzítés</span>
+      <h2>A nyolc lépés</h2>
+      <p class="lead">A „TMS adatmezők és szabályok" dokumentum szerinti folyamat. A sikerjelzés csak a szerver sikeres válasza után jelenik meg.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">1. lépés</span><h3>Indítás</h3><p>Új fuvar külön, vezetett képernyőn.</p></div>
+      <div class="step"><span class="n">2. lépés</span><h3>Partner és hitelkeret</h3><p>Megbízó, megbízásszám, kapcsolattartó, felelős. Elfogyott keretnél nincs továbblépés.</p></div>
+      <div class="step"><span class="n">3. lépés</span><h3>Megállók és áru</h3><p>Több fel-/lerakó, súly, darab, méret, LDM, mennyiségi egyenleg.</p></div>
+      <div class="step"><span class="n">4. lépés</span><h3>Díj és km</h3><p>Rakott/üres km, HUF/EUR díj, ismételt hitelkeret-ellenőrzés.</p></div>
+      <div class="step"><span class="n">5. lépés</span><h3>Erőforrás</h3><p>Kamion, pótkocsi, automatikus sofőr, előző lerakó és üres km.</p></div>
+      <div class="step"><span class="n">6. lépés</span><h3>Megbízás feltöltése</h3><p>Kötelező PDF/JPG/PNG/WEBP, legfeljebb 20 MB.</p></div>
+      <div class="step"><span class="n">7. lépés</span><h3>Visszaigazolás</h3><p>Strukturált áttekintés, nyomtatható HTML-visszaigazolás.</p></div>
+      <div class="step"><span class="n">8. lépés</span><h3>Mentés</h3><p>Egy tranzakcióban rögzül a fuvar és a dokumentum kapcsolata.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Követelmény-lefedettség</span>
+      <h2>A 19 szakmai követelménycsoport állapota</h2>
+      <p class="lead">A „Közúti követelmények és megvalósítási terv" dokumentum csoportjai, a kódban ellenőrizhető állapot szerint. Egy modul megléte nem jelenti a teljes tenderfejezet elfogadott teljesítését.</p>
+    </div>
+    <div class="legend"><span class="pill ok">Megvalósítva</span><span class="pill part">Részleges</span><span class="pill ext">Külső illesztés / fejlesztendő</span></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Csoport</th><th>Állapot</th><th>Ami már működik</th></tr></thead>
+      <tbody>
+        <tr><td>1. Megbízáskezelés</td><td><span class="pill part">Részleges</span></td><td class="d">Nyolclépéses rögzítés, több megálló, ADR-jelölés, visszavonható import, szerveraudit.</td></tr>
+        <tr><td>2. Import, partneri rendelés</td><td><span class="pill part">Részleges</span></td><td class="d">CSV és .xlsx import teljes kötegvalidálással; Transporeon/project44 végpont még nincs.</td></tr>
+        <tr><td>3. Diszponálás, kapacitás</td><td><span class="pill part">Részleges</span></td><td class="d">Drag-and-drop kiosztás, többnapos ütközés, raksúly-, ADR- és szervizellenőrzés.</td></tr>
+        <tr><td>4. Térkép, útvonalak</td><td><span class="pill part">Részleges</span></td><td class="d">Tárolt viszonylatok, HERE truck és Google DRIVE adapter; élő GPS nincs.</td></tr>
+        <tr><td>5. Sofőr mobil</td><td><span class="pill part">Részleges</span></td><td class="d">Reszponzív sofőr munkatér; natív/offline alkalmazás még nincs.</td></tr>
+        <tr><td>6. Költség és díj</td><td><span class="pill part">Részleges</span></td><td class="d">Terv/tény költség, fedezet; díjtábla- és tarifamotor még nincs.</td></tr>
+        <tr><td>7. Számlaelőkészítés</td><td><span class="pill part">Részleges</span></td><td class="d">Ellenőrzött előkészítés, jóváhagyás, sztornó, outbox; SAP-feladás még nincs.</td></tr>
+        <tr><td>8. Beszerzés</td><td><span class="pill part">Részleges</span></td><td class="d">Igénytől beérkezésig tartó folyamat, jóváhagyási jogosultság.</td></tr>
+        <tr><td>9. Szerviz és flotta</td><td><span class="pill part">Részleges</span></td><td class="d">Járműtörzs, szervizhatár, műszaki érvényesség, kiosztási tiltás.</td></tr>
+        <tr><td>10. Dokumentumkezelés</td><td><span class="pill part">Részleges</span></td><td class="d">Feltöltés, verziózás, védett letöltés, CMR-hiányjelzés.</td></tr>
+        <tr><td>11. Riport, analitika</td><td><span class="pill part">Részleges</span></td><td class="d">Összesítések, státuszmegoszlás, CSV-export, közös dashboard.</td></tr>
+        <tr><td>12. CRM</td><td><span class="pill part">Részleges</span></td><td class="d">Partneradatok, hitelkeret, kintlévőség, fuvarozási előzmény.</td></tr>
+        <tr><td>13. Készlet, eszköz</td><td><span class="pill part">Részleges</span></td><td class="d">Cikktörzs, dokumentált készletmozgás, egyenlegellenőrzés.</td></tr>
+        <tr><td>14. SAP Business One</td><td><span class="pill ext">Külső illesztés</span></td><td class="d">Service Layer belépés, metaadat, kijelentkezés; üzleti adatcsere NTT DATA-val egyeztetendő.</td></tr>
+        <tr><td>15. Cégcsoport, kontrolling</td><td><span class="pill part">Részleges</span></td><td class="d">Cégtörzs, üzletági dimenzió, terv/tény fedezet, erőforrás-átirányítás.</td></tr>
+        <tr><td>16. AI útvonal-optimalizálás</td><td><span class="pill part">Részleges</span></td><td class="d">Magyarázható, szabályalapú járműrangsor; VRP-solver még nincs.</td></tr>
+        <tr><td>17. AI dokumentumfelismerés</td><td><span class="pill ext">Fejlesztendő</span></td><td class="d">Kézzel ellenőrizhető mintakivonat; éles OCR még nincs.</td></tr>
+        <tr><td>18. Sérülésdiagnosztika</td><td><span class="pill ext">Fejlesztendő</span></td><td class="d">Incidens fotóbizonyítékkal; automatikus képelemzés még nincs.</td></tr>
+        <tr><td>19. AI-asszisztens</td><td><span class="pill part">Részleges</span></td><td class="d">Szabályalapú válaszok és javaslatok; nyelvimodell még nincs bekötve.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap grid2">
+    <div>
+      <div class="head"><span class="eyebrow">Hozzáférés</span><h2>Szerepkörök</h2>
+      <p class="lead">Minden ügyfél önálló munkateret kap. A szerver a munkamenetből dönti el, melyik munkatér adatait látja a felhasználó.</p></div>
+      <div class="roles">
+        <div class="role"><code>admin</code><p>Minden üzleti modul, felhasználókezelés, integrációs kapcsolatteszt.</p></div>
+        <div class="role"><code>dispatcher</code><p>Fuvar, erőforrás, dokumentum, útvonal, készlet, szerviz és incidens. Pénzügyi jóváhagyás nélkül.</p></div>
+        <div class="role"><code>finance</code><p>Partner, költség, beszerzés, számlaelőkészítés és outbox. Fuvar operatív adatait nem írhatja.</p></div>
+        <div class="role"><code>viewer</code><p>A munkatér olvasása, módosítás nélkül.</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="head"><span class="eyebrow">Technika</span><h2>Architektúra</h2>
+      <p class="lead">Next.js 16 App Router, React 19, TypeScript, beépített Node 22 SQLite.</p></div>
+      <div class="layers">
+        <div class="layer"><b>Felület</b><span>Magyar nyelvű, reszponzív felület, modulonkénti URL.</span></div>
+        <div class="layer"><b>Kliensállapot</b><span>Optimista mentés, hiba esetén visszaállítás és értesítés.</span></div>
+        <div class="layer"><b>API</b><span>Hitelesített route handlerek, origin-ellenőrzés, Zod-validálás, szerepkörök.</span></div>
+        <div class="layer"><b>Tartomány</b><span>Közös üzleti szabályok, amelyeket a szerver újra lefuttat.</span></div>
+        <div class="layer"><b>Adattár</b><span><code>node:sqlite</code>, WAL, tranzakció, revízió és 409-es ütközésvédelem.</span></div>
+        <div class="layer"><b>Biztonság</b><span>scrypt jelszóhash, HttpOnly munkamenet, belépéskorlát, UPDATE/DELETE-védett audit.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Integrációk</span><h2>Külső rendszerek</h2>
+    <p class="lead">Minden integráció környezeti változóval, egy kijelölt munkatérhez kapcsolható. Beállítás nélkül nincs külső adatforgalom.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Terület</th><th>Állapot</th><th>Részlet</th></tr></thead>
+      <tbody>
+        <tr><td>HERE Routing v8</td><td><span class="pill ok">Működik kulccsal</span></td><td class="d">Valódi útvonal- és menetidőkérés, teherautó-paraméterekkel.</td></tr>
+        <tr><td>Google Routes</td><td><span class="pill ok">Működik kulccsal</span></td><td class="d">DRIVE útvonalszámítás, teherautó- és ADR-korlátozás nélkül.</td></tr>
+        <tr><td>SAP Business One</td><td><span class="pill part">Kapcsolatteszt</span></td><td class="d">Belépés, metaadat, kijelentkezés; pénzügyi feladás még nincs.</td></tr>
+        <tr><td>scanR / docR</td><td><span class="pill part">Mintafolyamat</span></td><td class="d">Ellenőrizhető kivonat; automatikus OCR-hez szolgáltatói API kell.</td></tr>
+        <tr><td>GPS, project44, Transporeon</td><td><span class="pill ext">Nincs aktiválva</span></td><td class="d">Szolgáltatói hozzáférés és adatmapping szükséges.</td></tr>
+        <tr><td>AETR / tachográf</td><td><span class="pill ext">Kézi adat</span></td><td class="d">Vezetésiidő-tartalék egyszerű küszöbbel; megfelelőségi motor nincs.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap grid2">
+    <div class="head" style="margin:0">
+      <span class="eyebrow">Kipróbálás</span>
+      <h2>Élő bemutató és helyi futtatás</h2>
+      <p class="lead">Az élő verzió a <a href="https://tess-tms.vercel.app" target="_blank" rel="noopener">tess-tms.vercel.app</a> címen fut. Első megnyitáskor a felület kéri a munkatér és az első adminisztrátor létrehozását (legalább 12 karakteres jelszóval), a bemutató mintaadatok külön választhatók.</p>
+      <p class="lead">A Vercel-verzió bemutató célú: az SQLite-adatbázis ott átmeneti tárolón van, ezért az adatok újraindításkor elveszhetnek. Éles használatra tartós lemezes Node- vagy Docker-telepítés kell.</p>
+    </div>
+    <div style="display:grid;gap:12px;align-content:start;min-width:0">
+      <div class="cmd">npm ci
+npm run dev        # http://localhost:3000
+npm test           # 79 teszt
+npm run build &amp;&amp; npm start</div>
+      <div class="cmd">docker build -t tess-tms:local .
+docker run -p 3000:3000 -v tess-tms-data:/app/data tess-tms:local</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Ütemterv</span><h2>Következő kiadási kapuk</h2></div>
+    <div class="next">
+      <div><h3>Ügyfélkonfiguráció</h3><p>Telephely-, szerződés- és díjtáblatörzs, ügyfélre szabott migráció.</p></div>
+      <div><h3>Identitás</h3><p>SSO/MFA, meghívás, elfelejtett jelszó, cég- és partnerszintű jogosultság.</p></div>
+      <div><h3>Operáció</h3><p>Időablak és AETR, külön sofőrmobil, alvállalkozók, telematika, értesítések.</p></div>
+      <div><h3>Pénzügy</h3><p>Számlázási profil, helyesbítő lánc, SAP üzleti mapping és feladás.</p></div>
+      <div><h3>Skálázás</h3><p>Normalizált adatmodell, műveleti API, indexek, külső objektumtár.</p></div>
+      <div><h3>Elfogadás</h3><p>Ügyfél-UAT a két PDF alapján, próbaüzem, szolgáltatói éles tesztek.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>tessTMS · TESOTTER platform · 2026. november</span>
+    <a href="https://github.com/BalogSebastian/tessTms" target="_blank" rel="noopener">github.com/BalogSebastian/tessTms</a>
+  </div>
+</footer>
+</body>
+</html>

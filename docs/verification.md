@@ -44,3 +44,5 @@ A felhasználói képreferenciák alapján külön operációs felület készül
 - A tervező próbájához kizárólag az elkülönített tesztadatbázisban szándékos, korábbi rendszerből örökölt ütközést modelleztünk. A normál szerveroldali kiosztás továbbra is tiltja az ilyen ütközést. A rakodás és a köztes menetszakaszok becsült időtartamát a felület megjelöli; ez nem GPS- vagy tachográfadat.
 
 A személyes oszlopbeállítások munkatérhez, felhasználóhoz és nézethez kötve az adott böngészőben tárolódnak. A beállítások nem változtatják meg az üzleti adatokat vagy a hozzáférési jogosultságokat.
+
+A második UI-körben a 390 × 844-es mobilpróba a fuvarlistán, a részletes szűrőpanelen és a tervezőn is 390 px dokumentumszélességet mért. A széles táblázat és idővonal a saját görgetési területén belül marad.

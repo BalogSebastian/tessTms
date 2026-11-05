@@ -116,6 +116,10 @@ td.d{color:var(--muted)}
 .next p{font-size:14px;color:var(--muted)}
 
 .cmd{font-family:var(--mono);font-size:13px;background:var(--nav);color:var(--nav-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre}
+.video-sec{background:var(--surface)}
+.player{border-radius:14px;overflow:hidden;border:1px solid #ffffff22;background:var(--nav);box-shadow:0 24px 60px #0b1f1a33;aspect-ratio:16/10;max-width:100%}
+.player video{display:block;width:100%;height:100%;background:var(--nav)}
+.vcap{color:#b9cdc7;font-size:14px;margin-top:-12px}
 footer{background:var(--nav);color:#b9cdc7;font-size:14px}
 footer .wrap{padding-block:32px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
 footer a{color:var(--lime)}
@@ -135,7 +139,8 @@ footer a{color:var(--lime)}
     <h1>Minden fuvar. <em>Egy biztos irány.</em></h1>
     <p class="lead">A TESOTTER magyar nyelvű fuvarszervezési és vállalati műveleti munkatere. A megbízástól a diszponáláson és a teljesítésen át a számlaelőkészítésig egy közös adatbázisban fut a teljes működés, 19 egymáshoz kapcsolódó szakmai modullal.</p>
     <div class="links">
-      <a class="btn primary" id="live-link" href="https://tess-tms.vercel.app" target="_blank" rel="noopener">Élő alkalmazás <span class="url">tess-tms.vercel.app</span></a>
+      <a class="btn primary" href="#video">▶ Videós bemutató <span class="url">5 perc</span></a>
+      <a class="btn ghost" id="live-link" href="https://tess-tms.vercel.app" target="_blank" rel="noopener">Élő alkalmazás <span class="url">tess-tms.vercel.app</span></a>
       <a class="btn ghost" href="https://github.com/BalogSebastian/tessTms" target="_blank" rel="noopener">Forráskód <span class="url">github.com/BalogSebastian/tessTms</span></a>
     </div>
     <div class="facts">
@@ -144,7 +149,8 @@ footer a{color:var(--lime)}
       <div><b>4</b><span>szerepkör, elkülönített munkaterek</span></div>
       <div><b>79</b><span>automatikus teszt, mind zöld</span></div>
     </div>
-    <div class="shot-hero"><img src="img/dashboard.png" alt="A tessTMS műveleti központja: fuvarszám, fuvarállomány értéke, várható fedezet és flottakapacitás"></div>
+    <div id="video" class="player"><video id="demo-video" controls playsinline preload="metadata" poster="video/poster.jpg" src="video/tesstms-bemutato.mp4"></video></div>
+    <p class="vcap">Videós bemutató, 5 perc, feliratokkal: mi működik már, mi nincs még benne, hogyan skálázható, és milyen biztonsági szintre vihető.</p>
   </div>
 </header>
 
