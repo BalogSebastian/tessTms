@@ -1,4 +1,4 @@
-import { uid, type Order, type TmsState } from "./model";
+import { uid, companies, type Order, type TmsState } from "./model";
 import { validateOrder } from "./rules";
 export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
@@ -40,11 +40,15 @@ export function importOrders(
     header.join(";") !== "reference;partner;from;to;price;currency;kg"
   )
     throw new Error("Hibás fejléc. Töltsd le a CSV-sablont.");
-  if (rows.length > 500)
-    throw new Error("Egy import legfeljebb 500 sort tartalmazhat.");
+  if (rows.length > 1000)
+    throw new Error("Egy import legfeljebb 1000 sort tartalmazhat.");
   if (!rows.length) throw new Error("A fájl nem tartalmaz adatsort.");
   const draft = structuredClone(state);
   const result: Order[] = [];
+  const deliveryDate = new Date(Date.now() + 86400000).toLocaleDateString(
+    "en-CA",
+    { timeZone: "Europe/Budapest" },
+  );
   rows.forEach((row, index) => {
     if (row.length !== 7)
       throw new Error(`${index + 2}. sor: pontosan 7 oszlop szükséges.`);
@@ -55,14 +59,23 @@ export function importOrders(
     if (!partner) throw new Error(`${index + 2}. sor: ismeretlen partner.`);
     if (currency !== "HUF" && currency !== "EUR")
       throw new Error(`${index + 2}. sor: HUF vagy EUR deviza szükséges.`);
+    if (!/^\d+(?:[.,]\d+)?$/.test(amount))
+      throw new Error(
+        `${index + 2}. sor: a fuvardíj érvényes pozitív szám legyen.`,
+      );
+    if (!/^\d+(?:[.,]\d+)?$/.test(kg))
+      throw new Error(
+        `${index + 2}. sor: a tömeg érvényes pozitív szám legyen.`,
+      );
     const o: Order = {
       id: uid(),
       reference,
       partnerId: partner.id,
-      companyId: "steel",
+      companyId: (state.companies ?? companies)[0]?.id || "",
       division: "Általános",
       type: "Belföld",
-      dispatcher: "Balog Sebastian",
+      dispatcher: "Import – kiosztandó",
+      createdBy: "CSV-import",
       contact: partner.contact,
       createdAt: new Date().toISOString(),
       status: "Új",
@@ -72,7 +85,7 @@ export function importOrders(
           type: "Felrakó",
           city: from,
           address: "Importált cím – ellenőrizendő",
-          date: "2026-11-06",
+          date: deliveryDate,
           time: "08:00",
         },
         {
@@ -80,13 +93,13 @@ export function importOrders(
           type: "Lerakó",
           city: to,
           address: "Importált cím – ellenőrizendő",
-          date: "2026-11-06",
+          date: deliveryDate,
           time: "16:00",
         },
       ],
       cargo: {
         name: "Importált rakomány",
-        kg: Number(kg),
+        kg: Number(kg.replace(",", ".")),
         pieces: 1,
         ldm: 0,
         adr: false,
@@ -94,7 +107,7 @@ export function importOrders(
       },
       loadedKm: 0,
       emptyKm: 0,
-      price: Number(amount),
+      price: Number(amount.replace(",", ".")),
       currency,
       plannedCost: 0,
       actualCost: 0,

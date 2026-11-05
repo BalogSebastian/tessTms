@@ -35,6 +35,7 @@ import {
   Menu,
   Send,
   RefreshCw,
+  LogOut,
   type LucideIcon,
 } from "lucide-react";
 const icons: Record<string, LucideIcon> = {
@@ -74,6 +75,7 @@ const icons: Record<string, LucideIcon> = {
   menu: Menu,
   send: Send,
   refresh: RefreshCw,
+  logout: LogOut,
   plug: Network,
 };
 export function Icon({

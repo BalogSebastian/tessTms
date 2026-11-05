@@ -1,13 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useTms } from "../store";
-import { money, uid, companies, type CompanyId } from "../../../lib/tms/model";
+import { money, uid, type CompanyId } from "../../../lib/tms/model";
 import { PageTitle } from "../ui/page-title";
 import { Panel, Table, StatusBadge, Modal, Field } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 const phases = ["Igény", "Jóváhagyva", "Megrendelve", "Beérkezett"] as const;
 export default function Procurement() {
-  const { state, orders, companyId, mutate } = useTms();
+  const { state, companies, orders, companyId, mutate } = useTms();
   const [open, setOpen] = useState(false);
   return (
     <>

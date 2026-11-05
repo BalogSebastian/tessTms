@@ -1,4 +1,10 @@
-import type { TmsState, Order, Status, CompanyId } from "./model";
+import {
+  companies,
+  type TmsState,
+  type Order,
+  type Status,
+  type CompanyId,
+} from "./model";
 const lanes = [
   ["Győr", "Wien"],
   ["Komárom", "München"],
@@ -70,6 +76,7 @@ const orders: Order[] = lanes.map((lane, i) => ({
 }));
 export const seed: TmsState = {
   schema: 1,
+  companies: structuredClone(companies),
   orders,
   partners: [
     {

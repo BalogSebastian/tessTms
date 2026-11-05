@@ -10,7 +10,12 @@ export const statuses = [
 ] as const;
 export type Status = (typeof statuses)[number];
 export type Currency = "HUF" | "EUR";
-export type CompanyId = "steel" | "west";
+export type CompanyId = string;
+export interface Company {
+  id: CompanyId;
+  name: string;
+  short: string;
+}
 export interface Partner {
   id: string;
   name: string;
@@ -28,6 +33,24 @@ export interface Stop {
   address: string;
   date: string;
   time: string;
+  cargoItems?: CargoItem[];
+}
+export interface CargoItem {
+  id: string;
+  name: string;
+  kg: number;
+  pieces: number;
+  ldm: number;
+  lengthCm?: number;
+  widthCm?: number;
+  heightCm?: number;
+}
+export interface SpecialRequirements {
+  sealNumber: string;
+  temperatureMin?: number;
+  temperatureMax?: number;
+  adrUnNumber: string;
+  instructions: string;
 }
 export interface Cargo {
   name: string;
@@ -60,6 +83,8 @@ export interface Order {
   trailer: string;
   driverId: string;
   notes: string;
+  createdBy?: string;
+  requirements?: SpecialRequirements;
   batchId?: string;
 }
 export interface Vehicle {
@@ -188,6 +213,7 @@ export interface Outbox {
 }
 export interface TmsState {
   schema: 1;
+  companies?: Company[];
   partners: Partner[];
   orders: Order[];
   vehicles: Vehicle[];
@@ -205,7 +231,7 @@ export interface TmsState {
   audit: Audit[];
   outbox: Outbox[];
 }
-export const companies = [
+export const companies: Company[] = [
   { id: "steel" as const, name: "Steel-Transz Kft.", short: "ST" },
   { id: "west" as const, name: "West-Bridge Kft.", short: "WB" },
 ];

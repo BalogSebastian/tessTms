@@ -5,6 +5,8 @@
 /.next
 /.next-dev
 /tmp
+/data
+/.tms-data
 *.tsbuildinfo
 /out
 next-env.d.ts

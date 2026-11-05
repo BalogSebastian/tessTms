@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { modules } from "../../lib/tms/catalog";
-import { companies, type CompanyId } from "../../lib/tms/model";
-import { useTms } from "./store";
+import { type CompanyId } from "../../lib/tms/model";
+import { roleLabels, useTms } from "./store";
 import { Icon } from "./ui/icon";
 import { Modal, Empty } from "./ui/primitives";
 
@@ -14,19 +14,47 @@ export default function WorkspaceShell({
   active: string;
   children: ReactNode;
 }) {
-  const { state, companyId, setCompanyId } = useTms();
+  const { state, companyId, setCompanyId, user, logout, isSaving, companies } =
+    useTms();
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const [mobile, setMobile] = useState(false);
   const current = modules.find((m) => m.key === active);
+  const initials = user.name
+    .split(/\s+/)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  useEffect(() => {
+    function shortcut(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+      if (event.key === "Escape") setMobile(false);
+    }
+    window.addEventListener("keydown", shortcut);
+    return () => window.removeEventListener("keydown", shortcut);
+  }, []);
   const openIncidents = state.incidents.filter((i) => i.status === "Nyitott");
   return (
     <div className="workspace-shell">
       <a className="skip-link" href="#main-content">
         Ugrás a tartalomhoz
       </a>
-      <aside className={`side-nav ${mobile ? "mobile-open" : ""}`}>
+      {mobile ? (
+        <button
+          className="nav-backdrop"
+          aria-label="Navigáció bezárása"
+          onClick={() => setMobile(false)}
+        />
+      ) : null}
+      <aside
+        id="workspace-navigation"
+        className={`side-nav ${mobile ? "mobile-open" : ""}`}
+      >
         <Link className="wordmark" href="/">
           <span className="logo-symbol">
             t<span>↗</span>
@@ -37,10 +65,12 @@ export default function WorkspaceShell({
           <span className="version-tag">PRO</span>
         </Link>
         <div className="workspace-select">
-          <span className="workspace-avatar">ST</span>
+          <span className="workspace-avatar">
+            {user.workspaceName.slice(0, 2).toUpperCase()}
+          </span>
           <div>
-            <strong>Tesotter workspace</strong>
-            <small>Cégcsoport munkatér</small>
+            <strong>{user.workspaceName}</strong>
+            <small>Vállalati munkatér</small>
           </div>
           <Icon name="down" size={14} />
         </div>
@@ -74,37 +104,50 @@ export default function WorkspaceShell({
             </div>
           ))}
         </nav>
-        <Link href="/settings" className="user-profile">
-          <span className="user-avatar">BS</span>
+        <div className="user-profile">
+          <span className="user-avatar">{initials}</span>
           <div>
-            <strong>Balog Sebastian</strong>
-            <small>Helyi demó · adminisztrátor</small>
+            <strong>{user.name}</strong>
+            <small>{roleLabels[user.role]}</small>
           </div>
-          <Icon name="settings" size={16} />
-        </Link>
+          <button
+            className="logout-button"
+            onClick={() => void logout()}
+            aria-label="Kijelentkezés"
+            title="Kijelentkezés"
+          >
+            <Icon name="logout" size={16} />
+          </button>
+        </div>
       </aside>
       <div className="main-area">
         <header className="top-bar">
           <button
             className="icon-btn mobile-menu"
             aria-label="Menü megnyitása"
+            aria-controls="workspace-navigation"
+            aria-expanded={mobile}
             onClick={() => setMobile(!mobile)}
           >
             <Icon name="menu" />
+          </button>
+          <button
+            className="top-search-button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Keresés a munkatérben"
+          >
+            <Icon name="search" size={15} />
+            <span>Fuvarszám, partner vagy modul keresése…</span>
+            <kbd>⌘ K</kbd>
           </button>
           <div className="breadcrumbs">
             Munkatér <Icon name="right" size={13} />
             <strong>{current?.title || "Új fuvarmegbízás"}</strong>
           </div>
           <div className="top-actions">
-            <button
-              className="search-trigger"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Icon name="search" size={16} />
-              <span>Keresés mindenhol</span>
-              <kbd>⌕</kbd>
-            </button>
+            <span className="workspace-edition">
+              <i /> TESOTTER PLATFORM
+            </span>
             <button
               className="icon-btn notification-trigger"
               aria-label="Értesítések"
@@ -113,13 +156,27 @@ export default function WorkspaceShell({
               <Icon name="bell" />
               {openIncidents.length ? <i /> : null}
             </button>
-            <span className="top-avatar">BS</span>
+            <Link
+              href="/settings"
+              className="top-user"
+              aria-label="Fiók és beállítások"
+            >
+              <span className="top-avatar">{initials}</span>
+              <div>
+                <strong>{user.name}</strong>
+                <small>{roleLabels[user.role]}</small>
+              </div>
+            </Link>
           </div>
         </header>
         <main id="main-content" className="page-content">
           <div className="context-line">
-            <span>
-              <i /> HELYI DEMÓ MUNKATÉR
+            <span
+              className={`save-status ${isSaving ? "pending" : ""}`}
+              role="status"
+            >
+              <i />
+              {isSaving ? "Módosítások mentése…" : "Minden módosítás mentve"}
             </span>
             <label className="company-filter">
               <Icon name="building" size={14} />
@@ -139,10 +196,18 @@ export default function WorkspaceShell({
               </select>
             </label>
           </div>
+          {user.role === "viewer" ? (
+            <div className="workspace-access-banner">
+              Megtekintői hozzáférés · A munkatér adatait olvashatod és
+              exportálhatod.
+            </div>
+          ) : null}
           {children}
           <footer className="workspace-footer">
             <span>tessTMS · Tesotter platform</span>
-            <span>Demóadatok · helyi mentés · nincs külső szinkronizálás</span>
+            <span>
+              {user.workspaceName} · Központi mentés · Védett hozzáférés
+            </span>
           </footer>
         </main>
       </div>

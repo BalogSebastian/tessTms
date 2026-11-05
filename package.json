@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "workspace:create": "tsx scripts/create-workspace.ts",
+    "backup": "tsx scripts/backup.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "next": "^16.4.5",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "read-excel-file": "^9.3.14",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -27,5 +30,8 @@
     "eslint-config-next": "^16.4.5",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./auth.css";
+import "./workspace.css";
+import "./work-table.css";
+import "./orders-workspace.css";
+import "./dispatch-workspace.css";
 import { TmsProvider } from "../components/platform/store";
 
 export const metadata: Metadata = {

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useTms } from "../store";
 import {
-  companies,
   money,
   sumRevenue,
   sumCost,
@@ -12,7 +11,7 @@ import { PageTitle } from "../ui/page-title";
 import { Panel, Table, Stat, Modal, Field, Notice } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 export default function Group() {
-  const { state, mutate } = useTms();
+  const { state, companies, mutate } = useTms();
   const [open, setOpen] = useState(false);
   return (
     <>

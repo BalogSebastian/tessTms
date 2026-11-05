@@ -3,16 +3,25 @@ import { useState } from "react";
 import { useTms } from "../store";
 import { uid } from "../../../lib/tms/model";
 import { importOrders, parseCsv } from "../../../lib/tms/import";
+import {
+  IMPORT_COLUMNS,
+  IMPORT_MAX_BYTES,
+  IMPORT_MAX_ROWS,
+  readImportSpreadsheet,
+} from "../../../lib/tms/spreadsheet";
 import { exportCsv } from "../../../lib/tms/files";
 import { PageTitle } from "../ui/page-title";
 import { Panel, Notice, Table } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 export default function Intake() {
-  const { state, mutate, notify } = useTms();
+  const { state, mutateAsync, isSaving, notify } = useTms();
   const [csv, setCsv] = useState(
     "reference;partner;from;to;price;currency;kg\nIMP-2026-001;Duna Útépítő Kft.;Győr;Budapest;245000;HUF;18000",
   );
   const [preview, setPreview] = useState<string[][]>([]);
+  const [reading, setReading] = useState(false);
+  const [error, setError] = useState("");
+  const [source, setSource] = useState("");
   const batches = Array.from(
     new Set(
       state.orders.map((o) => o.batchId).filter((id): id is string => !!id),
@@ -22,11 +31,15 @@ export default function Intake() {
   function validate() {
     try {
       importOrders(state, csv, "preview");
-      setPreview(parseCsv(csv));
+      setPreview(parseCsv(csv.replace(/^\ufeff/, "")));
+      setError("");
       notify("A sorok és az összesített hitelkeret ellenőrzése sikeres.");
     } catch (e) {
       setPreview([]);
-      notify(String(e), true);
+      const message =
+        e instanceof Error ? e.message : "Az import ellenőrzése sikertelen.";
+      setError(message);
+      notify(message, true);
     }
   }
   return (
@@ -39,7 +52,7 @@ export default function Intake() {
           className="button"
           onClick={() =>
             exportCsv("tms-import-sablon.csv", [
-              ["reference", "partner", "from", "to", "price", "currency", "kg"],
+              [...IMPORT_COLUMNS],
               [
                 "IMP-001",
                 "Duna Útépítő Kft.",
@@ -61,7 +74,7 @@ export default function Intake() {
           className={tab === "csv" ? "active" : ""}
           onClick={() => setTab("csv")}
         >
-          CSV / Excel-export
+          CSV / Excel (.xlsx)
         </button>
         <button
           className={tab === "partner" ? "active" : ""}
@@ -114,46 +127,103 @@ export default function Intake() {
             <Notice>
               {tab === "partner"
                 ? "A partneri beküldés helyi mintája ugyanazon validálással kerül be. Külső portálbejelentkezés még nincs csatlakoztatva."
-                : "Az Excelből pontosvesszővel tagolt CSV-t tölts fel. Minden sor ellenőrzött; hibás kötegből semmi nem kerül be."}
+                : "CSV vagy Excel (.xlsx) fájlt válassz, legfeljebb 5 MB és 1000 adatsor méretben. Excelnél az első munkalapot olvassuk; fejlécnek a CSV-sablon mezőneveit használd. Minden sor ellenőrzött; hibás kötegből semmi nem kerül be."}
             </Notice>
             <label className="file-input-label">
               <Icon name="import" size={18} />
-              CSV-fájl beolvasása
+              CSV- vagy Excel-fájl beolvasása
               <input
                 type="file"
-                accept=".csv"
+                accept=".csv,.xlsx"
+                disabled={reading || isSaving}
                 onChange={async (e) => {
-                  const f = e.target.files?.[0];
-                  if (f) {
-                    if (f.size > 1024 * 1024)
-                      return notify("Maximum 1 MB-os CSV olvasható be.", true);
-                    setCsv(await f.text());
-                    setPreview([]);
+                  const input = e.currentTarget;
+                  const file = input.files?.[0];
+                  if (!file) return;
+                  setPreview([]);
+                  setError("");
+                  setReading(true);
+                  try {
+                    if (file.size > IMPORT_MAX_BYTES)
+                      throw new Error("Legfeljebb 5 MB-os fájl olvasható be.");
+                    if (!file.size)
+                      throw new Error("A kiválasztott fájl üres.");
+                    let content: string;
+                    if (/\.xlsx$/i.test(file.name))
+                      content = await readImportSpreadsheet(file);
+                    else if (/\.csv$/i.test(file.name)) {
+                      content = await file.text();
+                      if (parseCsv(content).length - 1 > IMPORT_MAX_ROWS)
+                        throw new Error(
+                          `Egy import legfeljebb ${IMPORT_MAX_ROWS} adatsort tartalmazhat.`,
+                        );
+                    } else
+                      throw new Error(
+                        "CSV vagy .xlsx fájl szükséges. A régi .xls formátumot mentsd .xlsx-ként.",
+                      );
+                    setCsv(content);
+                    setSource(file.name);
+                    notify(
+                      "A fájl beolvasva. Importálás előtt ellenőrizd a sorokat.",
+                    );
+                  } catch (failure) {
+                    const message =
+                      failure instanceof Error
+                        ? failure.message
+                        : "A fájl nem olvasható be.";
+                    setError(message);
+                    notify(message, true);
+                  } finally {
+                    setReading(false);
+                    input.value = "";
                   }
                 }}
               />
             </label>
+            {reading ? (
+              <p role="status" className="muted">
+                Excel / CSV feldolgozása…
+              </p>
+            ) : source ? (
+              <p className="muted">
+                Beolvasott fájl: {source}. A tartalom lent ellenőrizhető és
+                módosítható.
+              </p>
+            ) : null}
             <textarea
               aria-label="Import CSV tartalma"
               className="code-input"
               rows={7}
+              disabled={reading || isSaving}
               value={csv}
               onChange={(e) => {
                 setCsv(e.target.value);
                 setPreview([]);
+                setSource("");
+                setError("");
               }}
             />
+            {error ? (
+              <div className="error-message" role="alert">
+                <Icon name="alert" size={17} />
+                {error}
+              </div>
+            ) : null}
             <div className="button-row">
-              <button className="button" onClick={validate}>
+              <button
+                className="button"
+                disabled={reading || isSaving}
+                onClick={validate}
+              >
                 1. Ellenőrzés
               </button>
               <button
                 className="button primary"
-                disabled={!preview.length}
-                onClick={() => {
+                disabled={!preview.length || reading || isSaving}
+                onClick={async () => {
                   const id = uid();
                   if (
-                    mutate("Importköteg beemelve", id, (d) => {
+                    await mutateAsync("Importköteg beemelve", id, (d) => {
                       const rows = importOrders(d, csv, id);
                       d.orders.unshift(...rows);
                     })
@@ -188,13 +258,29 @@ export default function Intake() {
             {batch.slice(0, 8)}{" "}
             <button
               className="text-link"
+              disabled={isSaving || reading}
               onClick={() =>
-                mutate("Importköteg visszavonva", batch, (d) => {
+                void mutateAsync("Importköteg visszavonva", batch, (d) => {
                   const list = d.orders.filter((o) => o.batchId === batch);
                   if (
                     list.some((o) => o.status !== "Új") ||
                     d.documents.some((doc) =>
                       list.some((o) => o.id === doc.orderId),
+                    ) ||
+                    d.costs.some((cost) =>
+                      list.some((order) => order.id === cost.orderId),
+                    ) ||
+                    d.invoices.some((invoice) =>
+                      list.some((order) => invoice.orderIds.includes(order.id)),
+                    ) ||
+                    d.messages.some((message) =>
+                      list.some((order) => order.id === message.orderId),
+                    ) ||
+                    d.incidents.some((incident) =>
+                      list.some((order) => order.id === incident.orderId),
+                    ) ||
+                    d.purchases.some((purchase) =>
+                      list.some((order) => order.id === purchase.orderId),
                     )
                   )
                     throw new Error(

@@ -14,7 +14,7 @@ import {
 } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 export default function Damage() {
-  const { state, orders, mutate, notify } = useTms();
+  const { state, orders, mutate, mutateAsync, notify } = useTms();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
@@ -97,7 +97,7 @@ export default function Damage() {
                 const id = uid();
                 if (file) await saveFile(file, id);
                 if (
-                  mutate("Incidens rögzítve", String(f.get("order")), (d) => {
+                  await mutateAsync("Incidens rögzítve", String(f.get("order")), (d) => {
                     d.incidents.unshift({
                       id,
                       orderId: String(f.get("order")),

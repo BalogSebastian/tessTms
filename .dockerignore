@@ -1,0 +1,17 @@
+.git
+node_modules
+.next
+.next-dev
+.env*
+data
+.tms-data
+tmp
+output
+out
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.tsbuildinfo
+npm-debug.log*
+.DS_Store

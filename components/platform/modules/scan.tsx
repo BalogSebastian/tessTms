@@ -12,7 +12,7 @@ export default function Scan() {
   const [file, setFile] = useState("");
   const [data, setData] = useState({
     reference: "OCR-MINTA-001",
-    partner: state.partners[0].name,
+    partner: state.partners[0]?.name || "",
     from: "Budapest",
     to: "Győr",
     price: "295000",

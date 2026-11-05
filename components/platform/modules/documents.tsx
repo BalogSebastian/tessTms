@@ -7,7 +7,7 @@ import { PageTitle } from "../ui/page-title";
 import { Panel, Table, Badge, Modal, Field, Empty } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 export default function Documents() {
-  const { state, orders, mutate, notify } = useTms();
+  const { state, orders, mutateAsync, notify } = useTms();
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -28,7 +28,7 @@ export default function Documents() {
       const id = uid();
       await saveFile(file, id);
       if (
-        mutate("Dokumentum csatolva", file.name, (d) => {
+        await mutateAsync("Dokumentum csatolva", file.name, (d) => {
           const version =
             d.documents.filter((x) => x.orderId === orderId && x.type === type)
               .length + 1;
@@ -180,7 +180,7 @@ export default function Documents() {
             <label className="upload-zone">
               <Icon name="import" size={28} />
               <strong>{file?.name || "Válassz fájlt"}</strong>
-              <span>PDF vagy kép · max. 20 MB · IndexedDB helyi fájltár</span>
+              <span>PDF vagy kép · max. 20 MB · Védett szerveroldali fájltár</span>
               <input
                 type="file"
                 accept=".pdf,.png,.jpg,.jpeg,.webp"
