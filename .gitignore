@@ -1,0 +1,19 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next
+/.next-dev
+/tmp
+*.tsbuildinfo
+/out
+next-env.d.ts
+
+# local installers
+*.msi
+
+# local environment files
+.env*
+
+# logs
+npm-debug.log*
