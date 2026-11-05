@@ -1609,3 +1609,8 @@
 .orders-ws-filters .orders-ws-status-options > label {
   color: #647d6b;
 }
+.orders-ws .work-table.wt-compact .wt-scroll td {
+  height: 52px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}

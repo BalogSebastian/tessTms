@@ -23,7 +23,8 @@ Az adatok és a csatolt fájlok alapértelmezett helye `data/tess-tms.sqlite`. A
 
 - Nyolclépéses fuvarrögzítés: partner, hitelkeret, több megálló, árumennyiségek, díj, költség, erőforrás, dokumentum és nyomtatható visszaigazolás.
 - Tételszintű fel- és lerakás, méretek, plomba, hőmérséklet és ADR-adatmezők; rakodási sorrend és mennyiségi egyenleg ellenőrzése.
-- Diszponálás, státuszfolyamat, időbeli jármű-/sofőr-/pótkocsiütközés és szervizellenőrzés; tárolt útvonalak.
+- Nap / három nap / hét járműtervező, rögzített kamion–sofőr–pótkocsi sorok, szabad időszakok, piros ütközésjelzés és szakaszolt tervezési idővonal; tárolt útvonalak.
+- Kiosztatlan és kiosztott fuvarlista összetett szűrőkkel, 25 választható oszloppal, kézi oszlopméretezéssel, személyes nézettel, kijelöléssel és közvetlen fuvarszerkesztővel.
 - Ellenőrzött, kötegelt CSV- és Excel (.xlsx) import, legfeljebb 5 MB / 1000 adatsor, és a még feldolgozatlan köteg visszavonása.
 - Terv/tény költség, fedezet, gyűjtött számlaelőkészítés, beszerzési jóváhagyás, flotta, partnerek, készletmozgások és riportexport.
 - Központi fájltár, dokumentumverziók, hiányjelzések és szerveroldali eseménynapló.

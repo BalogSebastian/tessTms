@@ -186,7 +186,7 @@ export default function Dispatch() {
       label: `${String((index * (days === 1 ? 2 : 6)) % 24).padStart(2, "0")}:00`,
     }),
   );
-  const minWidth = days === 7 ? 1450 : days === 3 ? 720 : 720;
+  const minWidth = days === 7 ? 1450 : 720;
   const currentCivil = new Date(
     `${today()}T${new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Budapest", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date())}:00Z`,
   ).getTime();

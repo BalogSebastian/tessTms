@@ -32,3 +32,15 @@ A képernyőképek az `output/` könyvtárban, bemutató- és tesztadatokkal ké
 Szolgáltatói kulcsok hiányában nem történt éles HERE/Google/SAP-kérés; az adapterek szerződéseit mockolt válaszokkal teszteltük. A scanR, Transporeon, project44, SMTP, AI és tachográf szolgáltatás nincs élesítve. A Docker image futtatása nem volt ellenőrizhető, mert a helyi gépen nincs Docker CLI. Nem történt nyilvános telepítés vagy GitHub-push.
 
 A részletes megvalósítási határok a [követelménymátrixban](requirements-coverage.md) és az [integrációs leírásban](integrations.md) szerepelnek.
+
+## Második UI-kör: fuvarlista és járműtervező
+
+A felhasználói képreferenciák alapján külön operációs felület készült, a korábbi zöld–teal/lime színvilág megtartásával. Az ellenőrzött tesztcsomag 79/79 sikeres tesztre bővült; a teljes lint, a TypeScript-ellenőrzés és a production build sikeres.
+
+- Fuvarlista: kiosztatlan/kiosztott/összes fülek; kombinálható partner-, dátum-, státusz-, reláció-, rakomány-, ADR-, erőforrás-, pénzügyi és dokumentumszűrők; közvetlen szerkesztő, 25 választható oszlop, kijelölés és export.
+- Oszlopszélesség: a böngészős próbában 200 → 210 px billentyűzettel, majd 245 px egérhúzással. Az új szélesség oldalfrissítés után is 245 px maradt. Oszlop elrejtése és sorrendjének módosítása a tényleges táblázat fejlécében is érvényesült.
+- Kombinált szűrés: a megbízó és a „Győr” keresőkifejezés együtt pontosan egy megfelelő fuvarra szűkítette a tesztállományt.
+- Tervező: napos, háromnapos és heti naptár; a heti próba a november 5–11. közötti hét napot mutatta. Jármű, sofőr és pótkocsi együtt látható; a rögzített időpontok ütközései külön piros figyelmeztetésben és egymás alatti sávokban jelennek meg.
+- A tervező próbájához kizárólag az elkülönített tesztadatbázisban szándékos, korábbi rendszerből örökölt ütközést modelleztünk. A normál szerveroldali kiosztás továbbra is tiltja az ilyen ütközést. A rakodás és a köztes menetszakaszok becsült időtartamát a felület megjelöli; ez nem GPS- vagy tachográfadat.
+
+A személyes oszlopbeállítások munkatérhez, felhasználóhoz és nézethez kötve az adott böngészőben tárolódnak. A beállítások nem változtatják meg az üzleti adatokat vagy a hozzáférési jogosultságokat.

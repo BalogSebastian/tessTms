@@ -19,3 +19,4 @@ next-env.d.ts
 
 # logs
 npm-debug.log*
+/.vercel

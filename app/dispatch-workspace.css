@@ -1651,31 +1651,139 @@
 }
 
 /* Compact operational density keeps the whole three-day view visible on laptop screens. */
-.planner-titlebar { margin:0 0 16px; align-items:center; gap:12px; }
-.planner-kicker { display:none; }
-.planner-titlebar h1 { font-size:25px; margin-bottom:6px; }
-.planner-titlebar>div>p:last-child { font-size:11px; line-height:1.4; }
-.planner-toolbar { padding:7px 14px; min-height:48px; gap:11px; }
-.planner-ws .planner-search input { min-height:29px; }
-.planner-commandbar { padding:7px 14px; min-height:43px; gap:10px; margin-bottom:12px; }
-.planner-view-tabs { padding:2px; }
-.planner-view-tabs button { padding:5px 11px; }
-.planner-layout { gap:12px; }
-.planner-board-heading { padding:12px 15px; min-height:43px; }
-.planner-grid-heading { height:62px; }
-.planner-days { height:33px; }
-.planner-hours { height:28px; }
-.planner-hours>span { top:8px; }
-.planner-resource { min-height:88px; padding:14px 14px; }
-.planner-resource>i { top:35px; left:36px; }
-.planner-resource-row.conflicted .planner-resource { padding-left:11px; }
-.planner-segment.loaded,.planner-legend i.loaded { background-color:#23765e; }
-.planner-segment.loading,.planner-legend i.loading { background-color:#b5d57d; }
-.planner-focus-jobs>a>i.loaded { background:#358b70; }
-.planner-segment.empty { padding:0; min-height:0; gap:0; margin:0; }
-.planner-legend i { display:inline-block; padding:0; margin:0; min-height:0; min-width:0; flex:0 0 7px; width:7px; height:7px; }
-.planner-legend { padding:11px 14px; gap:9px; }
-.planner-legend>p { margin:0; }
-@media(max-width:1599px) { .planner-layout { grid-template-columns:minmax(0,1fr) 230px; } .planner-ws { --planner-resource:190px; } }
-@media(max-width:980px) { .planner-layout { grid-template-columns:minmax(0,1fr); } .planner-titlebar { margin-bottom:15px; } }
-@media(max-width:640px) { .planner-titlebar { align-items:flex-start; } .planner-titlebar h1 { font-size:23px; } .planner-toolbar { padding:9px 11px; } .planner-commandbar { padding:9px 11px; } .planner-title-actions { margin-top:3px; } .planner-resource-row.conflicted .planner-resource { padding-left:11px; } }
+.planner-titlebar {
+  margin: 0 0 16px;
+  align-items: center;
+  gap: 12px;
+}
+.planner-kicker {
+  display: none;
+}
+.planner-titlebar h1 {
+  font-size: 25px;
+  margin-bottom: 6px;
+}
+.planner-titlebar > div > p:last-child {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.planner-toolbar {
+  padding: 7px 14px;
+  min-height: 48px;
+  gap: 11px;
+}
+.planner-ws .planner-search input {
+  min-height: 29px;
+}
+.planner-commandbar {
+  padding: 7px 14px;
+  min-height: 43px;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.planner-view-tabs {
+  padding: 2px;
+}
+.planner-view-tabs button {
+  padding: 5px 11px;
+}
+.planner-layout {
+  gap: 12px;
+}
+.planner-board-heading {
+  padding: 12px 15px;
+  min-height: 43px;
+}
+.planner-grid-heading {
+  height: 62px;
+}
+.planner-days {
+  height: 33px;
+}
+.planner-hours {
+  height: 28px;
+}
+.planner-hours > span {
+  top: 8px;
+}
+.planner-resource {
+  min-height: 88px;
+  padding: 14px 14px;
+}
+.planner-resource > i {
+  top: 35px;
+  left: 36px;
+}
+.planner-resource-row.conflicted .planner-resource {
+  padding-left: 11px;
+}
+.planner-segment.loaded,
+.planner-legend i.loaded {
+  background-color: #23765e;
+}
+.planner-segment.loading,
+.planner-legend i.loading {
+  background-color: #b5d57d;
+}
+.planner-focus-jobs > a > i.loaded {
+  background: #358b70;
+}
+.planner-segment.empty {
+  padding: 0;
+  min-height: 0;
+  gap: 0;
+  margin: 0;
+}
+.planner-legend i {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+}
+.planner-legend {
+  padding: 11px 14px;
+  gap: 9px;
+}
+.planner-legend > p {
+  margin: 0;
+}
+@media (max-width: 1599px) {
+  .planner-layout {
+    grid-template-columns: minmax(0, 1fr) 230px;
+  }
+  .planner-ws {
+    --planner-resource: 190px;
+  }
+}
+@media (max-width: 980px) {
+  .planner-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .planner-titlebar {
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 640px) {
+  .planner-titlebar {
+    align-items: flex-start;
+  }
+  .planner-titlebar h1 {
+    font-size: 23px;
+  }
+  .planner-toolbar {
+    padding: 9px 11px;
+  }
+  .planner-commandbar {
+    padding: 9px 11px;
+  }
+  .planner-title-actions {
+    margin-top: 3px;
+  }
+  .planner-resource-row.conflicted .planner-resource {
+    padding-left: 11px;
+  }
+}
